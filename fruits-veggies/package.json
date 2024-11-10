@@ -1,12 +1,9 @@
 {
-  "homepage": "https://Ananth-kumar-ai.github.io/fruits-veggies-market",
   "name": "fruits-veggies",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
