@@ -1,12 +1,11 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path =require('path')
+const path = require('path');
 
-// Import models
-const Fruit = require('./backend/fruits');
-const Vegetable = require('./backend/vegetables');
-const Cart = require('./backend/cart');
+// Import models from the consolidated fruits.js file
+const { Fruit, Vegetable, Cart } = require('./backend/fruits');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,8 +20,9 @@ app.set('views', path.join(__dirname, 'views')); // Set views directory
 // MongoDB connection
 mongoose.connect('mongodb://127.0.0.1:27017/fruits-vegetables', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('Connected to MongoDB'))
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
 // Routes
@@ -52,15 +52,15 @@ app.post('/api/add-to-cart', async (req, res) => {
   const { name, img, price } = req.body;
 
   try {
-    // Check if item is already in the cart
+    // Check if the item already exists in the cart
     let cartItem = await Cart.findOne({ name });
 
     if (cartItem) {
-      // If the item exists, increment quantity
+      // If it exists, increment the quantity
       cartItem.quantity += 1;
       await cartItem.save();
     } else {
-      // If it does not exist, create a new entry
+      // If it doesn't exist, add it as a new entry
       cartItem = new Cart({ name, img, price, quantity: 1 });
       await cartItem.save();
     }
@@ -71,18 +71,17 @@ app.post('/api/add-to-cart', async (req, res) => {
   }
 });
 
-// Render cart page with items
+// Render the cart page with items
 app.get('/cart', async (req, res) => {
   try {
     const cartItems = await Cart.find();
-    res.render('cart.ejs', { cartItems });
-    
+    res.render('cart', { cartItems });
   } catch (error) {
     res.status(500).send('Error loading cart');
   }
 });
 
-// Delete item from cart
+// Delete item from the cart by ID
 app.get('/delete-cart-item/:id', async (req, res) => {
   try {
     await Cart.findByIdAndDelete(req.params.id);
