@@ -17,15 +17,7 @@ app.use(express.urlencoded({ extended: true })); // Parse form submissions
 app.set('view engine', 'ejs'); // Set EJS as templating engine
 app.set('views', path.join(__dirname, 'views')); // Set views directory
 
-// MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/fruits-vegetables', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-// Routes
 
 // Fetch all fruits
 app.get('/api/fruits', async (req, res) => {
